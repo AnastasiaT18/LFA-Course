@@ -1,4 +1,5 @@
 from Lab2.task2 import *
+from Lab2.task3 import *
 
 class Grammar:
     def __init__(self):
@@ -11,6 +12,35 @@ class Grammar:
 
 
 if __name__ == "__main__":
+    #task 2
     grammar = Grammar()
     print("Grammar is of type ", classify_by_chomsky(grammar))
+
+    #task3
+    delta = {
+        ("q0", "a"): ["q1", "q0"],
+        ("q1", "b"): ["q1"],
+        ("q1", "a"): ["q2"],
+        ("q2", "b"): ["q2"],
+        ("q2", "a"): ["q0"],
+    }
+    fa = FiniteAutomaton(["q0", "q1", "q2"], ["a", "b"], delta, "q0", "q2")
+
+    #convert fa to regular grammar
+    grammar = fa.fa_to_grammar()
+    print(grammar.V_n, grammar.V_t, grammar.S, grammar.P)
+
+    # determine if NFA or DFA
+    if fa.is_nfa():
+        print("Nondeterministic")
+    else:
+        print("Deterministic")
+
+    # convert ndfa to dfa
+    dfa = fa.nfa_to_dfa()
+    print(dfa.q)
+    print(dfa.f)
+    print(dfa.delta)
+
+    # graphically?? bonus
 
