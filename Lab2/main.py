@@ -1,6 +1,7 @@
 from Lab2.task2 import *
 from Lab2.task3 import *
 
+
 class Grammar:
     def __init__(self):
         self.V_n = ["S", "A", "B", "C"]
@@ -28,7 +29,7 @@ if __name__ == "__main__":
 
     #convert fa to regular grammar
     grammar = fa.fa_to_grammar()
-    print(grammar.V_n, grammar.V_t, grammar.S, grammar.P)
+    grammar.printGrammar()
 
     # determine if NFA or DFA
     if fa.is_nfa():
@@ -38,9 +39,5 @@ if __name__ == "__main__":
 
     # convert ndfa to dfa
     dfa = fa.nfa_to_dfa()
-    print(dfa.q)
-    print(dfa.f)
-    print(dfa.delta)
-
-    # graphically?? bonus
+    dfa.print_fa()
 

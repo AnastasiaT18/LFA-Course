@@ -13,6 +13,7 @@
 # δ(q2,a) = q0.
 
 
+from Lab2.grammar import Grammar
 
 class FiniteAutomaton:
     def __init__(self, q, sigma, delta, q0, f):
@@ -76,11 +77,12 @@ class FiniteAutomaton:
         dfa = FiniteAutomaton(dfa_q, dfa_sigma, dfa_delta,dfa_q0, dfa_f)
         return dfa
 
-
-class Grammar:
-    def __init__(self, V_n, V_t, S, P):
-        self.V_n = V_n
-        self.V_t = V_t
-        self.S = S
-        self.P = P
+    def print_fa(self):
+        print("Q: ", self.q)
+        print("∑ : ", self.sigma)
+        print("F: ", self.f)
+        print("q0:", self.q0)
+        print("δ (Transitions):")
+        for (start, char), results in self.delta.items():
+            print(f"  δ({start}, {char}) → {results}")  # Prints each transition on a new line
 
