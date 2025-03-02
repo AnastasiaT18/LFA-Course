@@ -6,6 +6,7 @@ class Grammar:
         self.P = P
 
     def printGrammar(self):
+        print("Grammar:")
         print("V_n: ",self.V_n)
         print("V_t: ",self.V_t )
         print("S: ",self.S)

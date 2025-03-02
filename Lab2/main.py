@@ -15,9 +15,11 @@ class Grammar:
 if __name__ == "__main__":
     #task 2
     grammar = Grammar()
+    print("---Task 2---")
     print("Grammar is of type ", classify_by_chomsky(grammar))
 
     #task3
+    print("---Task 3 ---")
     delta = {
         ("q0", "a"): ["q1", "q0"],
         ("q1", "b"): ["q1"],

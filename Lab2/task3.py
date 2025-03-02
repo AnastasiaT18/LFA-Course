@@ -78,6 +78,7 @@ class FiniteAutomaton:
         return dfa
 
     def print_fa(self):
+        print("FA:")
         print("Q: ", self.q)
         print("∑ : ", self.sigma)
         print("F: ", self.f)

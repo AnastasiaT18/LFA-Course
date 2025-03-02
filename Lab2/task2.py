@@ -3,9 +3,6 @@ import re
 def classify_by_chomsky(grammar):
 
     type3 = {"left":'[A-Z]{1}', "right":['[A-Z]?[a-z]*', '[a-z]*[A-Z]?']}
-    #type3_left = '[A-Z]?[a-z]*'
-    #type3_right = '[a-z]*[A-Z]?'
-    #type2 = '[a-zA-Z]*'
     type2 = r'^[^\s]*[A-Z]*[^\s]*$'
     type1 = {"left":'[a-z]*[A-Z]+[a-z]*', "right":'[a-zA-Z]*'} #lenght of left and right matters??
 
