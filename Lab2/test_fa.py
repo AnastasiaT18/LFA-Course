@@ -64,5 +64,33 @@ class TestAddFunction(unittest.TestCase):
         self.assertEqual(grammar_P_as_sets, expected_P)
         self.assertTrue(fa.is_nfa())
 
+    def test_nfa_to_dfa(self):
 
+        #v10
+        # delta = {
+        #     ("q0", "a"): ["q1"],
+        #     ("q1", "b"): ["q2", "q1"],
+        #     ("q1", "a"): ["q2"],
+        #     ("q3", "a"): ["q1"],
+        #     ("q0", "b"): ["q2"],
+        # }
+        #
+        # fa = FiniteAutomaton(["q0", "q1", "q2", "q3"], ["a", "b", "c"], delta, "q0", "q3")
+        #
+        # dfa = fa.nfa_to_dfa()
+        # dfa.print_fa()
+
+        #v14
+        delta = {
+            ("q0", "a"): ["q0"],
+            ("q1", "c"): ["q2", "q1"],
+            ("q1", "a"): ["q1"],
+            ("q2", "a"): ["q0"],
+            ("q0", "b"): ["q1"],
+        }
+
+        fa = FiniteAutomaton(["q0", "q1", "q2"], ["a", "b", "c"], delta, "q0", "q2")
+
+        dfa = fa.nfa_to_dfa()
+        dfa.print_fa()
 
