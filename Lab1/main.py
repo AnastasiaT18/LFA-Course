@@ -1,5 +1,6 @@
 from grammar import Grammar
 
+
 grammar = Grammar()
 valid_strings = []
 for i in range(5):
@@ -9,6 +10,7 @@ for string in valid_strings:
     print(string)
 
 finite_automaton = grammar.to_finite_automaton()
+print(finite_automaton.is_nfa())
 # print(finite_automaton.delta)
 # print(finite_automaton.f)
 
