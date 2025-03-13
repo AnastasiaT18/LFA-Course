@@ -70,9 +70,9 @@ class TestAddFunction(unittest.TestCase):
         # delta = {
         #     ("q0", "a"): ["q1"],
         #     ("q1", "b"): ["q2", "q1"],
-        #     ("q1", "a"): ["q2"],
+        #     ("q2", "c"): ["q3"],
         #     ("q3", "a"): ["q1"],
-        #     ("q0", "b"): ["q2"],
+        #     ("q0", "b"): ["q2"]
         # }
         #
         # fa = FiniteAutomaton(["q0", "q1", "q2", "q3"], ["a", "b", "c"], delta, "q0", "q3")
@@ -80,7 +80,7 @@ class TestAddFunction(unittest.TestCase):
         # dfa = fa.nfa_to_dfa()
         # dfa.print_fa()
 
-        #v14
+        # #v14
         delta = {
             ("q0", "a"): ["q0"],
             ("q1", "c"): ["q2", "q1"],
