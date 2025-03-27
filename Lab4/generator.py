@@ -27,6 +27,7 @@ def generate_string(tokens):
                 i += 1
             else:
                 result += result1
+            print(result)
 
         elif tokens[i] == "|":
 
@@ -42,6 +43,7 @@ def generate_string(tokens):
             else:
                 options.append(tokens[i+1])
             result = choice(options)
+            print(result)
             i += 2
 
         elif tokens[i] in {"*", "+", "?"} or tokens[i].startswith("{"):
@@ -71,6 +73,4 @@ def repeat(string, symbol):
 def divide(pattern):
     tokens = re.findall(r'\(|\)|\||\*|\+|\?|\{.*?\}|\w+', pattern)
     return tokens
-
-
 
