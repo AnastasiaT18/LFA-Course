@@ -8,6 +8,6 @@ if __name__ == '__main__':
     inputs = [input1, input2, input3]
 
     for input in inputs:
-        string = generate_string(divide(input))
-        print("Generated string for ", input, "is: ", string)
+        strings = [generate_string(divide(input)) for i in range(5)]
+        print("Generated strings for ", input, "is: ", strings)
 

@@ -1,138 +1,167 @@
-# Topic: Lexer & Scanner
+# Topic: Regular expressions
 
 
 ### Course: Formal Languages & Finite Automata
 ### Author: Anastasia Țîganescu, FAF-231
+### Variant: 1
 
 ----
 
 # Theory
-A lexer, also called a scanner or tokenizer, is the first
-step in processing a programming language or mathematical 
-expression. Its job is to scan an input string and break it down into smaller,
-meaningful units called tokens. These tokens are then used by the next stage, usually a parser, 
-to understand the structure of the expression or program.
+Regular expressions (regex) are patterns used to match sequences 
+of characters in a string. They help in searching, validating,
+and manipulating text efficiently. Commonly used in programming
+and data processing, regex can define rules like checking if an
+email is valid, extracting phone numbers, or parsing structured
+text.
 
-A lexer does not check for syntax errors like missing parentheses—it simply converts text into tokens. 
-The parser (next stage) is responsible for ensuring the tokens are arranged correctly.
+In this lab, regex patterns were used dynamically to generate
+valid strings. Instead of hardcoding outputs, the implementation
+interpreted any given regex and produced matching strings, 
+handling symbols like `*, +, ?, {}` (quantifiers), and `|` (alternation).
+Parentheses were used for grouping, and processing followed a 
+structured approach to ensure correctness.
+
 # Objectives:
 
-* Understand what lexical analysis [1] is.
-* Get familiar with the inner workings of a lexer/scanner/tokenizer.
-* Implement a sample lexer and show how it works.
+* Write and cover what regular expressions are, what they are used for;
+
+* Below you will find 3 complex regular expressions per each variant. Take a variant depending on your number in the list of students and do the following:
+
+* * Write a code that will generate valid combinations of symbols conform given regular expressions (examples will be shown). Be careful that idea is to interpret the given regular expressions dinamycally, not to hardcode the way it will generate valid strings. You give a set of regexes as input and get valid word as an output
+
+* * In case you have an example, where symbol may be written undefined number of times, take a limit of 5 times (to evade generation of extremely long combinations);
+
+* * Bonus point: write a function that will show sequence of processing regular expression (like, what you do first, second and so on)
+
+* Write a good report covering all performed actions and faced difficulties..
 
 # Implementation description
+The implementation consists of two primary functions:
 
-## 1. Token Definition
-At the core of my lexer is the TOKENS dictionary, which defines different types of tokens and their corresponding regular expressions. These include:
-
-* Numbers (NUMBER): Matches both integers and floating-point numbers, with optional positive or negative signs.
-* Arithmetic Operators (ADD, SUB, MUL, DIV, MOD, PWR): Covers basic mathematical operations, including addition, subtraction, multiplication, division, modulus, and exponentiation.
-* Trigonometric Functions (COS, SIN): Detects cos and sin in mathematical expressions.
-* Parentheses (LPAR, RPAR): Helps recognize grouping within expressions.
-* Whitespace (WHITESPACE): Matches spaces, tabs, and newlines, ensuring that they don’t interfere with tokenization.
-
+## 1. Tokenizing the Regular Expression
+The function `divide(pattern)` splits the regex pattern into individual tokens (symbols, operators, and groups).
+The `re.findall()` function is used to extract: parentheses(`()`), operators (` |, *, +, ?, {} `) and alphanumeric characters (words, letters, digits).
 ```
-TOKENS = {
-    "NUMBER" : r"[+-]?(\d+(\.\d+)?)",
-    "ADD": r"\+" ,
-    "SUB": r"\-" ,
-    "MUL": r"\*" ,
-    "COS": r"cos",
-    "SIN": r"sin",
-    "MOD": r"%",
-    "DIV": r"\/",
-    "LPAR": r"\(",
-    "RPAR": r"\)",
-    "PWR": r"\^",
-    "WHITESPACE": r"\s+"
-}
-```
-
-## 2. Token Pattern Compilation
-The next step involves creating a combined regex pattern that allows the lexer to scan for multiple token types at once. This is done using:
-```
-TOKEN_REGEX = "|".join(f"(?P<{name}>{pattern})" for name, pattern in TOKENS.items())
-TOKEN_PATTERN = re.compile(TOKEN_REGEX)
-
-```
-Here, each token type is wrapped inside a named capturing group (?P<name>), making it easy to retrieve the type of each matched token. The regex is then compiled using re.compile() for efficient execution.
-
-## 3. Tokenization Process
-The tokenize() function is responsible for scanning an input string and extracting tokens. It follows these steps:
-
-* Iterates over the input text using re.finditer(), which finds all matches based on the compiled regex pattern.
-```
-def tokenize(text):
-    tokens = []
-    for match in TOKEN_PATTERN.finditer(text):
-```
-* Retrieves the token type using match.lastgroup, which corresponds to the key in the TOKENS dictionary.
-```
-    type = match.lastgroup
-```
-* Retrieves the token value using match.group(), which contains the actual matched text.
-```
-    value = match.group()
-```
-* Ignores whitespace tokens, ensuring that they are recognized but not included in the final token list.
-Finally, the tokens array is returned.
-```
-if type != "WHITESPACE":
-            tokens.append((type, value))
+def divide(pattern):
+    tokens = re.findall(r'\(|\)|\||\*|\+|\?|\{.*?\}|\w+', pattern)
     return tokens
-```
-
-
-## Results & Screenshots
-To ensure the correctness and reliability of the lexer, I implemented a set 
-of unit tests using the unittest framework. These tests cover a variety of mathematical 
-expressions to verify that the lexer correctly tokenizes different types of input.
 
 ```
-class TestLexer(unittest.TestCase):
-    def test_lexer(self):
-        test = "cos(0.9) + sin(30) - 5"
-        print(test)
-        self.assertEqual(tokenize(test), [('COS', 'cos'), ('LPAR', '('), ('NUMBER', '0.9'), ('RPAR', ')'), ('ADD', '+'),  ('SIN', 'sin'), ('LPAR', '('), ('NUMBER', '30'), ('RPAR', ')'), ('SUB', '-'), ('NUMBER', '5')])
-        print(tokenize(test))
-    
-        test = "8 - 3 * 2"
-        self.assertEqual(tokenize(test), [('NUMBER', '8'), ('SUB', '-'),  ('NUMBER', '3'),  ('MUL', '*'), ('NUMBER', '2')])
+## 2. Generating Strings Based on Tokens
 
-        test = "(3^4 + 5) / 2"
-        self.assertEqual(tokenize(test), [('LPAR', '('), ('NUMBER', '3'),('PWR', '^'), ('NUMBER', '4'), ('ADD', '+'), ('NUMBER', '5'), ('RPAR', ')'), ('DIV', '/'), ('NUMBER', '2')])
+The function `generate_string(tokens)` generates a string based on the list of obtained tokens.
 
-        test = "cos(30)"
-        self.assertEqual(tokenize(test), [('COS', 'cos'), ('LPAR', '('), ('NUMBER', '30'), ('RPAR', ')')])
-
-        test = "-3.14 + +2.718"
-        self.assertEqual(tokenize(test), [('NUMBER', '-3.14'), ('ADD', '+'), ('NUMBER', '+2.718')])
-        ...
+If the token is a letter or digit (or a group of letters/digits), it's added to result as-is.
 ```
-Some example of outputs:
+def generate_string(tokens):
+    result = ""
+    i = 0
 
-<img src="./1.png" alt="Example 2" width="900" height="70" style="border: 1px solid grey;">
-<img src="./2.png" alt="Example 2" width="500" height="50" style="border: 1px solid grey;">
-<img src="./3.png" alt="Example 2" width="900" height="70" style="border: 1px solid grey;">
+    while i<len(tokens):
+        if tokens[i].isalnum():
+            result += tokens[i]
+            i += 1
+  
+```
+
+If the following token is a left paranthesis, then it starts working recursively
+on the token group defined by those parantheses: 
+```
+  elif tokens[i] == "(": ## get the block of parantheses
+            substring = []
+            start = i
+            j = start + 1
+
+            while j < len(tokens) and tokens[j] != ")":
+                substring.append(tokens[j])
+                j += 1
+            result1 = generate_string(substring)
+            i = j + 1
+
+            if i < len(tokens) and (tokens[i] in {"*", "+", "?"} or tokens[i].startswith("{")):
+                result += repeat(result1, tokens[i])
+                i += 1
+            else:
+                result += result1
+```
+Moreover, if the paranthesized group is followed by a quantifier, the function
+`repeat(string, symbol)` is called to apply the appropriate repetition rule.
+Otherwise, the result of the parenthesized group is simply appended.
+
+If the identified token is the alternation, it collects possible options (either a single character or a group in parentheses)
+and uses `choice(options)` to randomly select one.  
+```
+ elif tokens[i] == "|":
+            options = [result]
+            if tokens[i+1] == "(":
+                substring = []
+                start = i
+                j = start + 1
+                while j < len(tokens) and tokens[j] != ")":
+                    substring.append(tokens[j])
+                    j += 1
+                options.append(generate_string(substring))
+            else:
+                options.append(tokens[i+1])
+            result = choice(options)
+            i += 2
+```
+Finally, if a quantifier (`*, +, ?, {}`) follows a character, it calls the function `repeat(string, symbol)`
+to apply the appropriate repetition rule for the character appended most recently.
+
+```
+        elif tokens[i] in {"*", "+", "?"} or tokens[i].startswith("{"):
+            last = result[-1]
+            result = result[:-1] + repeat(last, tokens[i])
+            i += 1
+```
+In the end, the function returns the fully generated string that matches the regex pattern.
+
+The `repeat(string, symbol)` function is a helper function that applies regex quantifiers to a given string. It determines how many times the input string should be repeated based on the symbol (quantifier).
+It takes two arguments: 
+* string: The input string to be repeated.
+* symbol: The quantifier (e.g., *, +, ?, {}).
+```
+def repeat(string, symbol):
+    match symbol:
+        case "*":
+            return string * randint(0, 5)
+        case "+":
+            return string * randint(1, 5)
+        case "?":
+            return string * randint(0,1)
+        case _:
+            if symbol.startswith("{"):
+                times = int(symbol[1:-1])
+                return string * times
+```
+* The `*` quantifier means zero or more repetitions. 
+Uses randint(0, 5) to generate a random number of repetitions between 0 and 5.
+* The `+` quantifier means one or more repetitions.
+Uses randint(1, 5), ensuring at least one occurrence.
+* The `?` quantifier means zero or one occurrence.
+Uses randint(0, 1), so the string appears once or not at all.
+* If the quantifier is in curly braces (`{n}`), it means an exact number of repetitions.
+It extracts `n` using `int(symbol[1:-1])` and repeats string exactly `n` times.
+
+
+## Results
+My Variant was 1, so I ran the string generator on all three regex patterns from the variant:
+
+
+<img src="./task1.png" alt="Variant 1" width="300" height="100" style="border: 1px solid grey;">
+<img src="./v1.png" alt="Output V1" width="450" height="80" style="border: 1px solid grey;">
+
+However, I also implemented unit testing to see the outputs for all patterns in all variants:
+<img src="./tester.png" alt="Output All" width="550" height="350" style="border: 1px solid grey;">
 
 
 
 ## Conclusions
-Through the process of developing this lexer, I gained a deeper understanding of **lexical analysis**, particularly how a 
-lexer scans and tokenizes an input string into meaningful units. By using **regular expressions**, I learned how to define 
-patterns for different token types and dynamically build a tokenizer that processes mathematical expressions correctly.  
+This lab deepened my understanding of regular expressions and their role in text processing. I learned how to tokenize regex patterns, handle various operators dynamically, and generate valid strings accordingly. A key takeaway was recognizing how different quantifiers influence string generation and ensuring correct handling of alternation and grouping.
 
-One key takeaway was the importance of **handling whitespace** properly—while it appears in the input, it does not contribute to the meaning
-of the expression, so it needed to be identified but not included in the final token list. Another important aspect was ensuring that 
-**negative numbers and floating-point values** were correctly recognized as single tokens rather than being split into separate symbols.  
-
-Testing played a major role in verifying the correctness of the lexer. By writing structured **unit tests**, I confirmed that the implementation
-correctly handled different cases, including trigonometric functions, precedence-related expressions, and various number formats. 
-This reinforced the value of **test-driven development** in ensuring robustness.  
-
+Additionally, testing was crucial in verifying the correctness of the implementation across multiple patterns. Writing structured unit tests reinforced the importance of debugging and refining the logic for broader applicability. Overall, this experience improved my skills in working with regex and applying it programmatically.
 ## References
-* [Lexical analysis](https://en.wikipedia.org/wiki/Lexical_analysis)
-* [Kaleidoscope: Kaleidoscope Introduction and the Lexer](https://llvm.org/docs/tutorial/MyFirstLanguageFrontend/LangImpl01.html)
-* [Regular expressions](https://regex101.com/)
-* [re.finditer() in Python](https://www.geeksforgeeks.org/re-finditer-in-python/)
+* [Python, re.findall()](https://www.codecademy.com/resources/docs/python/regex/findall)
+* [Python String isalnum()](https://www.w3schools.com/python/ref_string_isalnum.asp)
