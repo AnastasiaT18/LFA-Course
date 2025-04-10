@@ -6,13 +6,16 @@ if __name__ == '__main__':
     V_n = ["S", "A", "B", "C", "D"]
     V_t = ["a", "b"]
     S = "S"
-    P = {"S":["aB", "DA"],
-         "A":["a", "BD", "aDADB", ],
+    P = {"S":["aB", "DA", "A"],
+         "A":["a", "BD", "D" ],
          "B": ["b", "ASB"],
          "D": ["", "BA"],
          "C": ["BA"]
+         # "C": ["aC"]
          }
     my_grammar = grammar.Grammar(V_n, V_t, S, P)
+
+    my_grammar.printGrammar()
 
     converter = cnf_converter.Converter()
 
