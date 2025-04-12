@@ -151,7 +151,69 @@ class Converter:
 
 
     def obtain_chomsky(self, grammar):
-        pass
+
+        new_P = {key: values[:] for key, values in grammar.P.items()}
+        new_prod = {}
+        counter = [1]
+        new_nonterminals = grammar.V_n
+        terminal_to_var = {}
+
+        for key,values in grammar.P.items():
+            for i, value in enumerate(values):
+                value = list(value)
+                # if len(value) == 1:
+                #     if value[0] in grammar.V_t:
+                #         sym = value[0]
+                #         if sym not in terminal_to_var:
+                #             var = f"X{counter}"
+                #             counter += 1
+                #             terminal_to_var[sym] = var
+                #             new_P[var] = [sym]
+                #             new_nonterminals.append(var)
+
+                if len(value) > 1:
+                    # v = ''.join(value)
+                    # new_P[key].append(self.break_into_binary(grammar, value, new_P, counter, new_nonterminals, terminal_to_var))
+                    # new_P[key].remove(v)
+                    new_P[key][i] = self.break_into_binary(grammar, value, new_P, counter, new_nonterminals, terminal_to_var)
+
+
+
+    def break_into_binary(self, grammar, value, new_P, counter, new_nonterminals, terminal_to_var):
+
+        if len(value) == 2:
+            if all(elem in grammar.V_n for elem in value):
+                return ''.join(value)
+            elif all(elem in grammar.V_t for elem in value):
+                return ''.join(value)
+            else:
+                for i, elem in enumerate(value):
+                    if elem in grammar.V_t:
+                        if elem not in terminal_to_var.keys():
+                            var = f"X{counter[0]}"
+                            counter[0] += 1
+                            terminal_to_var[elem] = var
+                            new_P[var] = [elem]
+                            new_nonterminals.append(var)
+                        value[i] = terminal_to_var[elem]
+                        return ''.join(value)
+
+
+        first= value[0]
+        rest = value[1:]
+
+        var = self.break_into_binary(grammar, rest, new_P, counter, new_nonterminals, terminal_to_var)
+
+        if var not in terminal_to_var.keys():
+            v = f"X{counter[0]}"
+            counter[0] += 1
+            terminal_to_var[var] = v
+            new_P[v] = [var]
+            new_nonterminals.append(v)
+        rest = terminal_to_var[var]
+        return ''.join(first + rest)
+
+
 
     def convert_to_cnf(self, grammar):
         grammar = self.eliminate_eps_transitions(grammar)
@@ -173,5 +235,9 @@ class Converter:
         grammar = self.obtain_chomsky(grammar)
         print("Chomsky Normal Form:")
         grammar.printGrammar()
+
+        # FIX SMTH WITH UNPRODUCTIVE
+        # BETTER CHECK CHOMSKY
+        # CHECK EVERYTHING
 
         return grammar
