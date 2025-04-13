@@ -2,7 +2,7 @@ from Lab2 import grammar
 from itertools import combinations
 
 
-class Converter:
+class CNFConverter:
 
     def eliminate_eps_transitions(self, grammar):
         new_P = {key: values[:] for key, values in grammar.P.items()}
@@ -47,9 +47,6 @@ class Converter:
 
             new_P[nullable].remove("")
             exist_nullables = True
-            # for key, values in new_P.items():
-            #     if "" in values:
-            #         values.remove("")
             grammar.P = {key: values[:] for key, values in new_P.items()}
 
         grammar.P = new_P
@@ -120,7 +117,6 @@ class Converter:
                 nonprod.append(nonterminal)
         return nonprod
 
-
     def eliminate_inaccessible(self, grammar):
         new_P = {key: values[:] for key, values in grammar.P.items()}
 
@@ -138,7 +134,6 @@ class Converter:
 
         return grammar
 
-
     def find_inaccessible_symbols(self, grammar):
         accessible_symbols = [grammar.S]
         inaccessible_symbols = []
@@ -153,7 +148,6 @@ class Converter:
             if nonterminal not in accessible_symbols:
                 inaccessible_symbols.append(nonterminal)
         return inaccessible_symbols
-
 
     def obtain_chomsky(self, grammar):
 
@@ -173,14 +167,10 @@ class Converter:
         grammar.V_n = new_nonterminals
         return grammar
 
-
-
     def break_into_binary(self, grammar, value, new_P, counter, new_nonterminals, terminal_to_var):
 
         if len(value) == 2:
             if all(elem in grammar.V_n for elem in value):
-                return ''.join(value)
-            elif all(elem in grammar.V_t for elem in value):
                 return ''.join(value)
             else:
                 for i, elem in enumerate(value):
@@ -192,7 +182,7 @@ class Converter:
                             new_P[var] = [elem]
                             new_nonterminals.append(var)
                         value[i] = terminal_to_var[elem]
-                        return ''.join(value)
+                return ''.join(value)
 
 
         first= value[0]

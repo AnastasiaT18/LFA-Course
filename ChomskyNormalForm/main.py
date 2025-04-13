@@ -1,12 +1,12 @@
 #Variant 29
 from Lab2 import grammar
-from Lab5 import cnf_converter
+from ChomskyNormalForm import cnf_converter
 
 if __name__ == '__main__':
     V_n = ["S", "A", "B", "C", "D"]
     V_t = ["a", "b"]
     S = "S"
-    P = {"S":["aB", "DA"],
+    P = {"S":["aB", "DA", "ab"],
          "A":["a", "BD", "aDADB"],
          "B": ["b", "ASB"],
          "D": ["", "BA"],
@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
     my_grammar.printGrammar()
 
-    converter = cnf_converter.Converter()
+    converter = cnf_converter.CNFConverter()
 
     my_grammar = converter.convert_to_cnf(my_grammar)
 

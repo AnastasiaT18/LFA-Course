@@ -7,7 +7,7 @@ from Lab5 import cnf_converter
 class TestAddFunction(unittest.TestCase):
 
     def test_V10(self): #V10
-        converter = cnf_converter.Converter()
+        converter = cnf_converter.CNFConverter()
 
         V_n = ["S", "A", "B", "D"]
         V_t = ["a", "b", "d"]
@@ -23,7 +23,7 @@ class TestAddFunction(unittest.TestCase):
         g = converter.convert_to_cnf(g)
 
     def test_V14(self):  # V10
-        converter = cnf_converter.Converter()
+        converter = cnf_converter.CNFConverter()
 
         V_n = ["S", "A", "B","C", "D"]
         V_t = ["a", "b"]
