@@ -19,6 +19,10 @@ class Converter:
                        exist_nullables = True
 
             if not N:
+                # if "" in new_P[grammar.S]:
+                #     grammar.V_n.append("S0")
+                #     new_P["S0"] = [f"{grammar.S}"]
+                #     grammar.S = "S0"
                 break
 
             for nullable in N:
@@ -73,7 +77,7 @@ class Converter:
                     if len(value) == 1 and value in grammar.V_n:
                         new = grammar.P[value]
                         for elem in new:
-                            if elem not in grammar.P[key]:
+                            if elem not in new_P[key]:
                                 new_P[key].append(elem)
                         new_P[key].remove(value)
                         exist_unit_productions = True
@@ -124,6 +128,7 @@ class Converter:
 
         if len(inaccessible_symbols) > 0:
             for symbol in inaccessible_symbols:
+                grammar.V_n.remove(symbol)
                 new_P.pop(symbol)
                 for key, values in new_P.items():
                     for value in values:
@@ -153,7 +158,6 @@ class Converter:
     def obtain_chomsky(self, grammar):
 
         new_P = {key: values[:] for key, values in grammar.P.items()}
-        new_prod = {}
         counter = [1]
         new_nonterminals = grammar.V_n
         terminal_to_var = {}
@@ -161,21 +165,13 @@ class Converter:
         for key,values in grammar.P.items():
             for i, value in enumerate(values):
                 value = list(value)
-                # if len(value) == 1:
-                #     if value[0] in grammar.V_t:
-                #         sym = value[0]
-                #         if sym not in terminal_to_var:
-                #             var = f"X{counter}"
-                #             counter += 1
-                #             terminal_to_var[sym] = var
-                #             new_P[var] = [sym]
-                #             new_nonterminals.append(var)
 
                 if len(value) > 1:
-                    # v = ''.join(value)
-                    # new_P[key].append(self.break_into_binary(grammar, value, new_P, counter, new_nonterminals, terminal_to_var))
-                    # new_P[key].remove(v)
                     new_P[key][i] = self.break_into_binary(grammar, value, new_P, counter, new_nonterminals, terminal_to_var)
+
+        grammar.P = new_P
+        grammar.V_n = new_nonterminals
+        return grammar
 
 
 
@@ -201,6 +197,15 @@ class Converter:
 
         first= value[0]
         rest = value[1:]
+
+        if first in grammar.V_t:
+            if first not in terminal_to_var.keys():
+                v = f"X{counter[0]}"
+                counter[0] += 1
+                terminal_to_var[first] = v
+                new_P[v] = [first]
+                new_nonterminals.append(v)
+            first = terminal_to_var[first]
 
         var = self.break_into_binary(grammar, rest, new_P, counter, new_nonterminals, terminal_to_var)
 
@@ -236,8 +241,5 @@ class Converter:
         print("Chomsky Normal Form:")
         grammar.printGrammar()
 
-        # FIX SMTH WITH UNPRODUCTIVE
-        # BETTER CHECK CHOMSKY
-        # CHECK EVERYTHING
 
         return grammar

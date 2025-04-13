@@ -12,5 +12,5 @@ class Grammar:
         print("S: ",self.S)
         print("P:")
         for key in self.P:
-            productions = " | ".join(self.P[key])
+            productions = " | ".join(prod if prod != "" else "ε" for prod in self.P[key])
             print(f"  {key} → {productions}")
