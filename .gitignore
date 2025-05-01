@@ -2,6 +2,7 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.log
 .idea/
 .DS_Store
 *.swp
