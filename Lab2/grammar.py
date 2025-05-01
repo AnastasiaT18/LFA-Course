@@ -10,4 +10,7 @@ class Grammar:
         print("V_n: ",self.V_n)
         print("V_t: ",self.V_t )
         print("S: ",self.S)
-        print("P:",self.P)
+        print("P:")
+        for key in self.P:
+            productions = " | ".join(prod if prod != "" else "ε" for prod in self.P[key])
+            print(f"  {key} → {productions}")
