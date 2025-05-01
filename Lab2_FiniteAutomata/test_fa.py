@@ -1,6 +1,6 @@
 import unittest
 
-from Lab2.task3 import FiniteAutomaton
+from Lab2_FiniteAutomata.task3 import FiniteAutomaton
 
 class TestAddFunction(unittest.TestCase):
 

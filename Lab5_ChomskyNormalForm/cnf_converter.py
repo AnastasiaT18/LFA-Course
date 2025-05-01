@@ -1,4 +1,4 @@
-from Lab2 import grammar
+from Lab2_FiniteAutomata import grammar
 from itertools import combinations
 
 

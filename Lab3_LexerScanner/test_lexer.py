@@ -1,5 +1,5 @@
 import unittest
-from Lab3.lexer import *
+from Lab3_LexerScanner.lexer import *
 
 class TestLexer(unittest.TestCase):
     def test_lexer(self):

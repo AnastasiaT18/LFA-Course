@@ -1,7 +1,7 @@
 import unittest
 
-from Lab2 import grammar
-from ChomskyNormalForm import cnf_converter
+from Lab2_FiniteAutomata import grammar
+from Lab5_ChomskyNormalForm import cnf_converter
 
 
 class TestAddFunction(unittest.TestCase):

@@ -13,7 +13,7 @@
 # δ(q2,a) = q0.
 
 
-from Lab2.grammar import Grammar
+from Lab2_FiniteAutomata.grammar import Grammar
 
 class FiniteAutomaton:
     def __init__(self, q, sigma, delta, q0, f):

@@ -1,6 +1,6 @@
 import unittest
-from Lab2.task2 import classify_by_chomsky
-from Lab2.grammar import *
+from Lab2_FiniteAutomata.task2 import classify_by_chomsky
+from Lab2_FiniteAutomata.grammar import *
 
 
 
