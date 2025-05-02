@@ -26,7 +26,6 @@ class Parser:
 
     def parse_expr(self):
         node = self.parse_term()
-        token = self.current_token()
         while self.current(TokenType.ADD) or self.current(TokenType.SUB):
             op = self.advance()[1]
             right = self.parse_term()
