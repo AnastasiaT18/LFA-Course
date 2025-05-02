@@ -1,18 +1,13 @@
-# #grammar
-#
-# expr    ::= term (("+" | "-") term)*              ;
-# term    ::= factor (("*" | "/" | "%") factor)*    ;
-# factor  ::= power ("^" factor)?                   ; // handles right-associative power
-# power   ::= FUNC "(" expr ")"                     ; // sin(x), cos(x)
-#          | NUMBER
-#          | "(" expr ")"
-from adodbapi.ado_consts import adVariant
 
 from lexer import *
 from AST import *
 
 class Parser:
-    def __init__(self, tokens):
+    def __init__(self):
+        self.tokens = []
+        self.pos = 0
+
+    def feed(self, tokens):
         self.tokens = tokens
         self.pos = 0
 
